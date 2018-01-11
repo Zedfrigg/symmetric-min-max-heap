@@ -3,13 +3,15 @@ package com.kernelmaft.saxion_concurrency.assignment2;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
-public class IntervalHeap<E> implements DoubleEndedPrioQueue<E>
+public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 {
 	private final ArrayList<PrioritisedElement<E>> array;
 	
-	public IntervalHeap()
+	public SymmetricMinMaxHeap()
 	{
 		array = new ArrayList<>();
+		// Add empty element at index 0 for easier index calculations
+		array.add(null);
 		// Add empty root element
 		array.add(null);
 	}
@@ -21,13 +23,13 @@ public class IntervalHeap<E> implements DoubleEndedPrioQueue<E>
 	
 	@Override public int size()
 	{
-		return array.size() - 1;
+		return array.size() - 2;
 	}
 	
 	@Override public E getMin()
 	{
 		try {
-			return array.get(1).element;
+			return array.get(2).element;
 		} catch (IndexOutOfBoundsException exception) {
 			throw new NoSuchElementException("Cannot get the lowest priority element because the interval heap is empty");
 		}
@@ -36,7 +38,7 @@ public class IntervalHeap<E> implements DoubleEndedPrioQueue<E>
 	@Override public E getMax()
 	{
 		try {
-			return array.get(2).element;
+			return array.get(3).element;
 		} catch (IndexOutOfBoundsException exception) {
 			throw new NoSuchElementException("Cannot get the highest priority element because the interval heap is empty");
 		}
