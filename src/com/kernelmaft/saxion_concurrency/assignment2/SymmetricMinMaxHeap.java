@@ -72,7 +72,7 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	{
 		final StringBuilder dotOutput = new StringBuilder();
 		
-		dotOutput.append("graph{");
+		dotOutput.append("graph { ");
 		// TODO: add DOT generation
 		dotOutput.append("}");
 		
