@@ -22,12 +22,14 @@ public interface DoubleEndedPrioQueue<E>
 	/**
 	 * Get the element in the priority queue with the lowest priority. The element will not be removed from the queue.
 	 * @return The aforementioned element.
+	 * @throws java.util.NoSuchElementException If the queue is empty.
 	 */
 	public E getMin();
 	
 	/**
 	 * Get the element in the priority queue with the highest priority. The element will not be removed from the queue.
 	 * @return The aforementioned element.
+	 * @throws java.util.NoSuchElementException If the queue is empty.
 	 */
 	public E getMax();
 	
