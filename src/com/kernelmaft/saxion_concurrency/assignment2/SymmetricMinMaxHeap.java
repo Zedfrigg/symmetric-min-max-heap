@@ -54,29 +54,27 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	{
 		// TODO: edge cases
 		
-		if (index % 2 == 0) {
-			// The element is a left child
-			
-			if (!checkPropertyTwo(index)) {
-				//
-			}
-			else if (!checkPropertyThree(index)) {
-				//
-			}
-			else {
-				//
-			}
+		// If there are 0 or 1 elements there's nothing to do
+		if (isEmpty() || size() < 2)
+			return;
+		
+		if (bottomLevel && !checkPropertyOne(index)) {
+			swap(index, index - 1);
+			bubbleUp(index - 1, false);
 		}
 		else {
-			// The element is a right child
-			
-			if (bottomLevel) {
-				// We're at the bottom level of the tree, which means we have to check P1
+			final int indexLeftChildGrandparent = (index / 4) * 2;
+			if (array.get(indexLeftChildGrandparent).priority <= array.get(index).priority) {
+				// P2 is violated
 				
-				if (!checkPropertyOne(index)) {
-					swap(index, index - 1);
-					bubbleUp(index - 1, false);
-				}
+				swap(index, indexLeftChildGrandparent);
+				bubbleUp(indexLeftChildGrandparent, false);
+			}
+			else if (array.get(indexLeftChildGrandparent + 1).priority >= array.get(index).priority) {
+				// P3 is violated
+				
+				swap(index, indexLeftChildGrandparent + 1);
+				bubbleUp(indexLeftChildGrandparent + 1, false);
 			}
 		}
 	}
