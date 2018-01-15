@@ -46,7 +46,68 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	
 	@Override public void put(E newElement, int priority)
 	{
-		throw new RuntimeException("Not implemented");
+		array.add(new PrioritisedElement<>(newElement, priority));
+		bubbleUp(array.size() - 1, true);
+	}
+	
+	private void bubbleUp(int index, boolean bottomLevel)
+	{
+		// TODO: edge cases
+		
+		if (index % 2 == 0) {
+			// The element is a left child
+			
+			if (!checkPropertyTwo(index)) {
+				//
+			}
+			else if (!checkPropertyThree(index)) {
+				//
+			}
+			else {
+				//
+			}
+		}
+		else {
+			// The element is a right child
+			
+			if (bottomLevel) {
+				// We're at the bottom level of the tree, which means we have to check P1
+				
+				if (!checkPropertyOne(index)) {
+					swap(index, index - 1);
+					bubbleUp(index - 1, false);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Swaps two elements in the heap.
+	 * @param indexFirst The index of the first element.
+	 * @param indexSecond The index of the second element.
+	 */
+	private void swap(int indexFirst, int indexSecond)
+	{
+		final PrioritisedElement<E> temporary = array.get(indexFirst);
+		array.set(indexFirst, array.get(indexSecond));
+		array.set(indexSecond, temporary);
+	}
+	
+	private boolean checkPropertyOne(int index)
+	{
+		return array.get(index).priority >= array.get(index - 1).priority;
+	}
+	
+	private boolean checkPropertyTwo(int index)
+	{
+		final int indexLeftChildGrandparent = (index / 4) * 2;
+		return array.get(indexLeftChildGrandparent).priority <= array.get(index).priority;
+	}
+	
+	private boolean checkPropertyThree(int index)
+	{
+		final int indexRightChildGrandparent = (index / 4) * 2 + 1;
+		return array.get(indexRightChildGrandparent).priority >= array.get(index).priority;
 	}
 	
 	@Override public E removeMin()
