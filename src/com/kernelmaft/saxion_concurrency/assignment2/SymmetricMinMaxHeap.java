@@ -57,25 +57,26 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	
 	private void bubbleUp(int index, boolean bottomLevel)
 	{
-		// TODO: edge cases
-		
-		if (bottomLevel && !checkPropertyOne(index)) {
+		if (bottomLevel && (index % 2 == 1) && !checkPropertyOne(index)) {
 			swap(index, index - 1);
 			bubbleUp(index - 1, false);
 		}
 		else {
 			final int indexLeftChildGrandparent = (index / 4) * 2;
-			if (array.get(indexLeftChildGrandparent).priority <= array.get(index).priority) {
-				// P2 is violated
-				
-				swap(index, indexLeftChildGrandparent);
-				bubbleUp(indexLeftChildGrandparent, false);
-			}
-			else if (array.get(indexLeftChildGrandparent + 1).priority >= array.get(index).priority) {
-				// P3 is violated
-				
-				swap(index, indexLeftChildGrandparent + 1);
-				bubbleUp(indexLeftChildGrandparent + 1, false);
+			// If the element has no grandparent it doesn't need to be checked, we're at the top of the tree
+			if (indexLeftChildGrandparent != 0) {
+				if (array.get(indexLeftChildGrandparent).priority > array.get(index).priority) {
+					// P2 is violated
+					
+					swap(index, indexLeftChildGrandparent);
+					bubbleUp(indexLeftChildGrandparent, false);
+				}
+				else if (array.get(indexLeftChildGrandparent + 1).priority < array.get(index).priority) {
+					// P3 is violated
+					
+					swap(index, indexLeftChildGrandparent + 1);
+					bubbleUp(indexLeftChildGrandparent + 1, false);
+				}
 			}
 		}
 	}
@@ -131,11 +132,18 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	public String toDotTree()
 	{
 		final StringBuilder dotOutput = new StringBuilder();
-		
 		dotOutput.append("graph { ");
-		// TODO: add DOT generation
-		dotOutput.append("}");
 		
+		dotOutput.append("1 [label=\"1, root\"]; ");
+		for (int i = 2; i < array.size(); i++) {
+			final int elemPrio = array.get(i).priority;
+			dotOutput.append(i).append(" [label=\"").append(i).append(", ").append(elemPrio).append("\"]; ");
+			
+			final int parentIndex = i / 2;
+			dotOutput.append(i).append("--").append(parentIndex).append("; ");
+		}
+		
+		dotOutput.append("}");
 		return dotOutput.toString();
 	}
 }
