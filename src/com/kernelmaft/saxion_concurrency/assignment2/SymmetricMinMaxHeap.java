@@ -50,16 +50,14 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	@Override public void put(E newElement, int priority)
 	{
 		array.add(new PrioritisedElement<>(newElement, priority));
-		bubbleUp(array.size() - 1, true);
+		// If this is the first element the heap is already valid
+		if (size() > 1)
+			bubbleUp(array.size() - 1, true);
 	}
 	
 	private void bubbleUp(int index, boolean bottomLevel)
 	{
 		// TODO: edge cases
-		
-		// If there are 0 or 1 elements there's nothing to do
-		if (isEmpty() || size() < 2)
-			return;
 		
 		if (bottomLevel && !checkPropertyOne(index)) {
 			swap(index, index - 1);
