@@ -37,11 +37,14 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	
 	@Override public E getMax()
 	{
-		try {
-			return array.get(3).element;
-		} catch (IndexOutOfBoundsException exception) {
-			throw new NoSuchElementException("Cannot get the highest priority element because the interval heap is empty");
+		if (size() < 2) {
+			try {
+				return array.get(2).element;
+			} catch (IndexOutOfBoundsException exception) {
+				throw new NoSuchElementException("Cannot get the highest priority element because the interval heap is empty");
+			}
 		}
+		return array.get(3).element;
 	}
 	
 	@Override public void put(E newElement, int priority)
