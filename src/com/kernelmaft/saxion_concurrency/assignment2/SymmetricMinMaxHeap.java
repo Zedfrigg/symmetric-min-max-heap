@@ -96,12 +96,13 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	}
 	
 	/**
-	 * P1
-	 * @param index
-	 * @return
+	 * Checks whether P1 is violated for an element with a certain index and its left sibling.
+	 * @param index The index of the element to check.
+	 * @return True when the P1 is satisfied, false when it doesn't.
 	 */
 	private boolean biggerThanLeftSibling(int index)
 	{
+		// Also returns true when the elements are equal in order to avoid unnecessary swaps
 		return array.get(index).priority >= array.get(index - 1).priority;
 	}
 	
