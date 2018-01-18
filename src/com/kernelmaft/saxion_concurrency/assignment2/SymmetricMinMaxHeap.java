@@ -102,7 +102,7 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	 */
 	private boolean biggerThanLeftSibling(int index)
 	{
-		return array.get(index).priority > array.get(index - 1).priority;
+		return array.get(index).priority >= array.get(index - 1).priority;
 	}
 	
 	@Override public E removeMin()
@@ -134,6 +134,7 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 			final int elemPrio = array.get(i).priority;
 			dotOutput.append(i).append(" [label=\"").append(i).append(", ").append(elemPrio);
 			if (includeElements)
+				// Include the toString representation of the elements in the nodes
 				dotOutput.append(", ").append(array.get(i).element);
 			dotOutput.append("\"]; ");
 			
