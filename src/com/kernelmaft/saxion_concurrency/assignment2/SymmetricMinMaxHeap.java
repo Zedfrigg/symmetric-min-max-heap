@@ -59,7 +59,7 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	{
 		// TODO: preserve insertion order for elems with same prio, maybe w/ a comb of bottomLevel checks and > vs >=
 		
-		if (bottomLevel && (index % 2 == 1) && !checkPropertyOne(index)) {
+		if (bottomLevel && (index % 2 == 1) && !biggerThanLeftSibling(index)) {
 			swap(index, index - 1);
 			bubbleUp(index - 1, false);
 		}
@@ -95,21 +95,14 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 		array.set(indexSecond, temporary);
 	}
 	
-	private boolean checkPropertyOne(int index)
+	/**
+	 * P1
+	 * @param index
+	 * @return
+	 */
+	private boolean biggerThanLeftSibling(int index)
 	{
-		return array.get(index).priority >= array.get(index - 1).priority;
-	}
-	
-	private boolean checkPropertyTwo(int index)
-	{
-		final int indexLeftChildGrandparent = (index / 4) * 2;
-		return array.get(indexLeftChildGrandparent).priority <= array.get(index).priority;
-	}
-	
-	private boolean checkPropertyThree(int index)
-	{
-		final int indexRightChildGrandparent = (index / 4) * 2 + 1;
-		return array.get(indexRightChildGrandparent).priority >= array.get(index).priority;
+		return array.get(index).priority > array.get(index - 1).priority;
 	}
 	
 	@Override public E removeMin()
@@ -131,18 +124,21 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	 * Gives the DOT-language tree representation of the internal heap. Can be used for visualisation and debugging.
 	 * @return A string containing the representation.
 	 */
-	public String toDotTree()
+	public String toDotTree(boolean includeElements)
 	{
 		final StringBuilder dotOutput = new StringBuilder();
-		dotOutput.append("graph { ");
+		dotOutput.append("digraph { ");
 		
 		dotOutput.append("1 [label=\"1, root\"]; ");
 		for (int i = 2; i < array.size(); i++) {
 			final int elemPrio = array.get(i).priority;
-			dotOutput.append(i).append(" [label=\"").append(i).append(", ").append(elemPrio).append("\"]; ");
+			dotOutput.append(i).append(" [label=\"").append(i).append(", ").append(elemPrio);
+			if (includeElements)
+				dotOutput.append(", ").append(array.get(i).element);
+			dotOutput.append("\"]; ");
 			
 			final int parentIndex = i / 2;
-			dotOutput.append(i).append("--").append(parentIndex).append("; ");
+			dotOutput.append(parentIndex).append("->").append(i).append("; ");
 		}
 		
 		dotOutput.append("}");
