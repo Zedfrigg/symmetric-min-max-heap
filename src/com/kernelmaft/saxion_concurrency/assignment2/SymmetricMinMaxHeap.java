@@ -57,6 +57,8 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	
 	private void bubbleUp(int index, boolean bottomLevel)
 	{
+		// TODO: preserve insertion order for elems with same prio, maybe w/ a comb of bottomLevel checks and > vs >=
+		
 		if (bottomLevel && (index % 2 == 1) && !checkPropertyOne(index)) {
 			swap(index, index - 1);
 			bubbleUp(index - 1, false);
@@ -65,13 +67,13 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 			final int indexLeftChildGrandparent = (index / 4) * 2;
 			// If the element has no grandparent it doesn't need to be checked, we're at the top of the tree
 			if (indexLeftChildGrandparent != 0) {
-				if (array.get(indexLeftChildGrandparent).priority > array.get(index).priority) {
+				if (array.get(index).priority < array.get(indexLeftChildGrandparent).priority) {
 					// P2 is violated
 					
 					swap(index, indexLeftChildGrandparent);
 					bubbleUp(indexLeftChildGrandparent, false);
 				}
-				else if (array.get(indexLeftChildGrandparent + 1).priority < array.get(index).priority) {
+				else if (array.get(index).priority > array.get(indexLeftChildGrandparent + 1).priority) {
 					// P3 is violated
 					
 					swap(index, indexLeftChildGrandparent + 1);

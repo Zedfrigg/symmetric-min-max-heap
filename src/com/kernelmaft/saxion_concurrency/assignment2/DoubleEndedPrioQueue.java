@@ -34,8 +34,7 @@ public interface DoubleEndedPrioQueue<E>
 	public E getMax();
 	
 	/**
-	 * Add a new element with a specified priority to the priority queue. Adding the same element more than one time
-	 * will result in undefined behaviour.
+	 * Add a new element with a specified priority to the priority queue.
 	 * @param newElement The new element to add.
 	 * @param priority   The priority of the element.
 	 */
