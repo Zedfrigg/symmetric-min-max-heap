@@ -60,7 +60,7 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	{
 		// TODO: preserve insertion order for elems with same prio, maybe w/ a comb of bottomLevel checks and > vs >=
 		
-		if (bottomLevel && (index % 2 == 1) && !biggerThanLeftSibling(index)) {
+		if (bottomLevel && !isLeftChild(index) && !biggerThanLeftSibling(index)) {
 			swap(index, index - 1);
 			bubbleUp(index - 1, false);
 		}
@@ -124,15 +124,18 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	{
 		// TODO: edge case handling
 		
-		if (index % 2 == 0) {
-			if (array.get(index * 2).priority < array.get(index).priority) {
-				if (array.get(index * 2 + 2).priority < array.get(index * 2).priority) {
-					swap(index, index * 2 + 2);
-					bubbleDown(index * 2 + 2);
+		if (isLeftChild(index)) {
+			final int indexLeftChild = index * 2;
+			if (array.get(indexLeftChild).priority < array.get(index).priority) {
+				
+				final int indexRightCousin = indexLeftChild + 2;
+				if (array.get(indexRightCousin).priority < array.get(indexLeftChild).priority) {
+					swap(index, indexRightCousin);
+					bubbleDown(indexRightCousin);
 				}
 				else {
-					swap(index, index * 2);
-					bubbleDown(index * 2);
+					swap(index, indexLeftChild);
+					bubbleDown(indexLeftChild);
 				}
 			}
 		}
@@ -153,6 +156,11 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	@Override public void updatePriority(E element, int newPriority)
 	{
 		throw new RuntimeException("Not implemented");
+	}
+	
+	private static boolean isLeftChild(int index)
+	{
+		return index % 2 == 0;
 	}
 	
 	/**
