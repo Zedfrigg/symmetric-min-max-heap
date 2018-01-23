@@ -111,8 +111,11 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	@Override public E removeMin()
 	{
 		final PrioritisedElement<E> removedElement = array.get(2);
-		array.set(2, array.remove(array.size() - 1));
-		bubbleDown(2);
+		final PrioritisedElement<E> lastElement = array.remove(array.size() - 1);
+		if (array.size() > 3) {
+			array.set(2, lastElement);
+			bubbleDown(2);
+		}
 		return removedElement.element;
 	}
 	
@@ -123,33 +126,64 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	
 	private void bubbleDown(int index)
 	{
-		// TODO: edge case handling
-		
+		final int elementPrio = array.get(index).priority;
 		final int leftChild = index * 2;
 		if (isLeftChild(index)) {
-			if (array.get(leftChild).priority < array.get(index).priority) {
+			if (leftChild < array.size()) {
+				// Element has a left child
 				
+				final int leftChildPrio = array.get(leftChild).priority;
+				final boolean leftChildSmallerThanElem = leftChildPrio < elementPrio;
 				final int rightNephew = leftChild + 2;
-				if (array.get(rightNephew).priority < array.get(leftChild).priority) {
+				final boolean rightNephewExists = rightNephew < array.size();
+				
+				if (leftChildSmallerThanElem) {
+					// Element is bigger than left child, violation of P2
+					
+					if (rightNephewExists && array.get(rightNephew).priority < leftChildPrio) {
+						// Right nephew is even smaller than left child
+						swap(index, rightNephew);
+						bubbleDown(rightNephew);
+					}
+					else {
+						// Left child is the smallest
+						swap(index, leftChild);
+						bubbleDown(leftChild);
+					}
+				}
+				else if (rightNephewExists && array.get(rightNephew).priority < elementPrio) {
+					// Right nephew is the smallest
 					swap(index, rightNephew);
 					bubbleDown(rightNephew);
-				}
-				else {
-					swap(index, leftChild);
-					bubbleDown(leftChild);
 				}
 			}
 		}
 		else {
-			final int rightChild = leftChild + 1;
-			if (array.get(rightChild).priority > array.get(index).priority) {
+			final int leftNephew = leftChild - 1;
+			if (leftNephew < array.size()) {
+				// Element has a left nephew
 				
-				final int leftNephew = leftChild - 1;
-				if (array.get(leftNephew).priority > array.get(rightChild).priority) {
-					swap(index, leftNephew);
-					bubbleDown(leftNephew);
+				final int leftNephewPrio = array.get(leftNephew).priority;
+				final boolean leftNephewBiggerThanElem = leftNephewPrio > elementPrio;
+				final int rightChild = leftChild + 1;
+				final boolean rightChildExists = rightChild < array.size();
+				
+				if (leftNephewBiggerThanElem) {
+					// Element is smaller than right nephew, violation of P3
+					
+					if (rightChildExists && array.get(rightChild).priority > leftNephewPrio) {
+						// Right child is even bigger than left nephew
+						swap(index, rightChild);
+						bubbleDown(rightChild);
+					}
+					else {
+						// Left nephew is the smallest
+						swap(index, leftNephew);
+						bubbleDown(leftNephew);
+					}
 				}
-				else {
+				else if (rightChildExists && array.get(rightChild).priority > elementPrio) {
+					// Right child is the biggest
 					swap(index, rightChild);
 					bubbleDown(rightChild);
 				}
