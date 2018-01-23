@@ -65,20 +65,21 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 			bubbleUp(index - 1, false);
 		}
 		else {
-			final int indexLeftChildGrandparent = (index / 4) * 2;
+			final int leftChildGrandparent = (index / 4) * 2;
+			final int rightChildGrandparent = leftChildGrandparent + 1;
 			// If the element has no grandparent it doesn't need to be checked, we're at the top of the tree
-			if (indexLeftChildGrandparent != 0) {
-				if (array.get(index).priority < array.get(indexLeftChildGrandparent).priority) {
+			if (leftChildGrandparent != 0) {
+				if (array.get(index).priority < array.get(leftChildGrandparent).priority) {
 					// P2 is violated
 					
-					swap(index, indexLeftChildGrandparent);
-					bubbleUp(indexLeftChildGrandparent, false);
+					swap(index, leftChildGrandparent);
+					bubbleUp(leftChildGrandparent, false);
 				}
-				else if (array.get(index).priority > array.get(indexLeftChildGrandparent + 1).priority) {
+				else if (array.get(index).priority > array.get(rightChildGrandparent).priority) {
 					// P3 is violated
 					
-					swap(index, indexLeftChildGrandparent + 1);
-					bubbleUp(indexLeftChildGrandparent + 1, false);
+					swap(index, rightChildGrandparent);
+					bubbleUp(rightChildGrandparent, false);
 				}
 			}
 		}
@@ -125,17 +126,17 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 		// TODO: edge case handling
 		
 		if (isLeftChild(index)) {
-			final int indexLeftChild = index * 2;
-			if (array.get(indexLeftChild).priority < array.get(index).priority) {
+			final int leftChild = index * 2;
+			if (array.get(leftChild).priority < array.get(index).priority) {
 				
-				final int indexRightCousin = indexLeftChild + 2;
-				if (array.get(indexRightCousin).priority < array.get(indexLeftChild).priority) {
-					swap(index, indexRightCousin);
-					bubbleDown(indexRightCousin);
+				final int rightCousin = leftChild + 2;
+				if (array.get(rightCousin).priority < array.get(leftChild).priority) {
+					swap(index, rightCousin);
+					bubbleDown(rightCousin);
 				}
 				else {
-					swap(index, indexLeftChild);
-					bubbleDown(indexLeftChild);
+					swap(index, leftChild);
+					bubbleDown(leftChild);
 				}
 			}
 		}
