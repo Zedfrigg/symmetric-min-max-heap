@@ -125,14 +125,14 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	{
 		// TODO: edge case handling
 		
+		final int leftChild = index * 2;
 		if (isLeftChild(index)) {
-			final int leftChild = index * 2;
 			if (array.get(leftChild).priority < array.get(index).priority) {
 				
-				final int rightCousin = leftChild + 2;
-				if (array.get(rightCousin).priority < array.get(leftChild).priority) {
-					swap(index, rightCousin);
-					bubbleDown(rightCousin);
+				final int rightNephew = leftChild + 2;
+				if (array.get(rightNephew).priority < array.get(leftChild).priority) {
+					swap(index, rightNephew);
+					bubbleDown(rightNephew);
 				}
 				else {
 					swap(index, leftChild);
@@ -141,14 +141,17 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 			}
 		}
 		else {
-			if (array.get(index * 2 + 1).priority > array.get(index).priority) {
-				if (array.get(index * 2 - 1).priority > array.get(index * 2 + 1).priority) {
-					swap(index, index * 2 - 1);
-					bubbleDown(index * 2 - 1);
+			final int rightChild = leftChild + 1;
+			if (array.get(rightChild).priority > array.get(index).priority) {
+				
+				final int leftNephew = leftChild - 1;
+				if (array.get(leftNephew).priority > array.get(rightChild).priority) {
+					swap(index, leftNephew);
+					bubbleDown(leftNephew);
 				}
 				else {
-					swap(index, index * 2 + 1);
-					bubbleDown(index * 2 + 1);
+					swap(index, rightChild);
+					bubbleDown(rightChild);
 				}
 			}
 		}
