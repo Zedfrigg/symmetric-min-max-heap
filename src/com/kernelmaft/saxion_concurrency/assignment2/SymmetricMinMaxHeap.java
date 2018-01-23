@@ -10,7 +10,7 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	public SymmetricMinMaxHeap()
 	{
 		array = new ArrayList<>();
-		// Add empty element at index 0 for easier index calculations
+		// Add empty element at index 0 for easier index arithmetic
 		array.add(null);
 		// Add empty root element
 		array.add(null);
@@ -53,6 +53,7 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 		// If this is the first element the heap is already valid
 		if (size() > 1)
 			bubbleUp(array.size() - 1, true);
+		// TODO: move bottom-level checks from bubbleUp into this method
 	}
 	
 	private void bubbleUp(int index, boolean bottomLevel)
@@ -108,12 +109,45 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	
 	@Override public E removeMin()
 	{
-		throw new RuntimeException("Not implemented");
+		final PrioritisedElement<E> removedElement = array.get(2);
+		array.set(2, array.remove(array.size() - 1));
+		bubbleDown(2);
+		return removedElement.element;
 	}
 	
 	@Override public E removeMax()
 	{
 		throw new RuntimeException("Not implemented");
+	}
+	
+	private void bubbleDown(int index)
+	{
+		// TODO: edge case handling
+		
+		if (index % 2 == 0) {
+			if (array.get(index * 2).priority < array.get(index).priority) {
+				if (array.get(index * 2 + 2).priority < array.get(index * 2).priority) {
+					swap(index, index * 2 + 2);
+					bubbleDown(index * 2 + 2);
+				}
+				else {
+					swap(index, index * 2);
+					bubbleDown(index * 2);
+				}
+			}
+		}
+		else {
+			if (array.get(index * 2 + 1).priority > array.get(index).priority) {
+				if (array.get(index * 2 - 1).priority > array.get(index * 2 + 1).priority) {
+					swap(index, index * 2 - 1);
+					bubbleDown(index * 2 - 1);
+				}
+				else {
+					swap(index, index * 2 + 1);
+					bubbleDown(index * 2 + 1);
+				}
+			}
+		}
 	}
 	
 	@Override public void updatePriority(E element, int newPriority)
