@@ -23,6 +23,7 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	
 	@Override public int size()
 	{
+		assert array.size() >= 2;
 		return array.size() - 2;
 	}
 	
@@ -105,11 +106,15 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	 */
 	private boolean biggerThanRightSibling(int index)
 	{
+		assert index > 0;
+		assert index + 1 < array.size();
 		return array.get(index).priority > array.get(index + 1).priority;
 	}
 	
 	@Override public E removeMin()
 	{
+		assert size() > 0;
+		
 		final PrioritisedElement<E> removedElement = array.get(2);
 		final PrioritisedElement<E> lastElement = array.remove(array.size() - 1);
 		if (array.size() > 3) {
@@ -121,6 +126,8 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	
 	@Override public E removeMax()
 	{
+		assert size() > 0;
+		
 		int elementToRemove = 3;
 		if (array.size() < 4) {
 			elementToRemove = 2;
@@ -136,6 +143,9 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	
 	private void bubbleDown(int index)
 	{
+		assert index > 0;
+		assert index < array.size();
+		
 		final int elementPrio = array.get(index).priority;
 		final int leftChild = index * 2;
 		if (isLeftChild(index)) {
@@ -220,6 +230,7 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	
 	private static boolean isLeftChild(int index)
 	{
+		assert index > 0;
 		return index % 2 == 0;
 	}
 	
