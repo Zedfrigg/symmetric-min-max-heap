@@ -113,7 +113,8 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	
 	@Override public E removeMin()
 	{
-		assert size() > 0;
+		if (size() < 1)
+			throw new NoSuchElementException("Cannot remove the lowest priority element because the interval heap is empty");
 		
 		final PrioritisedElement<E> removedElement = array.get(2);
 		final PrioritisedElement<E> lastElement = array.remove(array.size() - 1);
@@ -126,7 +127,8 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	
 	@Override public E removeMax()
 	{
-		assert size() > 0;
+		if (size() < 1)
+			throw new NoSuchElementException("Cannot remove the highest priority element because the interval heap is empty");
 		
 		int elementToRemove = 3;
 		if (array.size() < 4) {
@@ -152,6 +154,8 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 			final int rightSibling = index + 1;
 			final boolean hasRightSibling = rightSibling < array.size();
 			if (hasRightSibling && biggerThanRightSibling(index)) {
+				// Element is bigger than right sibling, violation of P1
+				
 				swap(index, rightSibling);
 				bubbleDown(rightSibling);
 			}
@@ -188,6 +192,8 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 			final int leftSibling = index - 1;
 			final int leftNephew = leftChild - 1;
 			if (biggerThanRightSibling(leftSibling)) {
+				// Left sibling is bigger than element, violation of P1
+				
 				swap(index, leftSibling);
 				bubbleDown(leftSibling);
 			}

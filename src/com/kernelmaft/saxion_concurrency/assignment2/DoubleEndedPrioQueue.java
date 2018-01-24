@@ -43,12 +43,14 @@ public interface DoubleEndedPrioQueue<E>
 	/**
 	 * Get and remove the element in the priority queue with the lowest priority.
 	 * @return The element that was removed.
+	 * @throws java.util.NoSuchElementException If the queue is empty.
 	 */
 	public E removeMin();
 	
 	/**
 	 * Get and remove the element in the priority queue with the highest priority.
 	 * @return The element that was removed.
+	 * @throws java.util.NoSuchElementException If the queue is empty.
 	 */
 	public E removeMax();
 	
