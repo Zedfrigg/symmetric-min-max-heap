@@ -60,9 +60,10 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	{
 		// TODO: preserve insertion order for elems with same prio, maybe w/ a comb of bottomLevel checks and > vs >=
 		
-		if (bottomLevel && !isLeftChild(index) && !biggerThanLeftSibling(index)) {
-			swap(index, index - 1);
-			bubbleUp(index - 1, false);
+		final int leftSibling = index - 1;
+		if (bottomLevel && !isLeftChild(index) && biggerThanRightSibling(leftSibling)) {
+			swap(index, leftSibling);
+			bubbleUp(leftSibling, false);
 		}
 		else {
 			final int leftChildGrandparent = (index / 4) * 2;
@@ -102,10 +103,9 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	 * @param index The index of the element to check.
 	 * @return True when the P1 is satisfied, false when it doesn't.
 	 */
-	private boolean biggerThanLeftSibling(int index)
+	private boolean biggerThanRightSibling(int index)
 	{
-		// Also returns true when the elements are equal in order to avoid unnecessary swaps
-		return array.get(index).priority >= array.get(index - 1).priority;
+		return array.get(index).priority > array.get(index + 1).priority;
 	}
 	
 	@Override public E removeMin()
@@ -121,7 +121,17 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	
 	@Override public E removeMax()
 	{
-		throw new RuntimeException("Not implemented");
+		int elementToRemove = 3;
+		if (array.size() < 4) {
+			elementToRemove = 2;
+		}
+		final PrioritisedElement<E> removedElement = array.get(elementToRemove);
+		final PrioritisedElement<E> lastElement = array.remove(array.size() - 1);
+		if (array.size() > 3) {
+			array.set(elementToRemove, lastElement);
+			bubbleDown(elementToRemove);
+		}
+		return removedElement.element;
 	}
 	
 	private void bubbleDown(int index)
@@ -129,7 +139,13 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 		final int elementPrio = array.get(index).priority;
 		final int leftChild = index * 2;
 		if (isLeftChild(index)) {
-			if (leftChild < array.size()) {
+			final int rightSibling = index + 1;
+			final boolean hasRightSibling = rightSibling < array.size();
+			if (hasRightSibling && biggerThanRightSibling(index)) {
+				swap(index, rightSibling);
+				bubbleDown(rightSibling);
+			}
+			else if (leftChild < array.size()) {
 				// Element has a left child
 				
 				final int leftChildPrio = array.get(leftChild).priority;
@@ -159,8 +175,13 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 			}
 		}
 		else {
+			final int leftSibling = index - 1;
 			final int leftNephew = leftChild - 1;
-			if (leftNephew < array.size()) {
+			if (biggerThanRightSibling(leftSibling)) {
+				swap(index, leftSibling);
+				bubbleDown(leftSibling);
+			}
+			else if (leftNephew < array.size()) {
 				// Element has a left nephew
 				
 				final int leftNephewPrio = array.get(leftNephew).priority;
@@ -194,6 +215,7 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	@Override public void updatePriority(E element, int newPriority)
 	{
 		throw new RuntimeException("Not implemented");
+		// Use bubbleDown w/ L>R checks everywhere
 	}
 	
 	private static boolean isLeftChild(int index)
