@@ -32,7 +32,7 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 		try {
 			return array.get(2).element;
 		} catch (IndexOutOfBoundsException exception) {
-			throw new NoSuchElementException("Cannot get the lowest priority element because the interval heap is empty");
+			throw new NoSuchElementException("Cannot get the lowest priority element because the queue is empty");
 		}
 	}
 	
@@ -42,7 +42,7 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 			try {
 				return array.get(2).element;
 			} catch (IndexOutOfBoundsException exception) {
-				throw new NoSuchElementException("Cannot get the highest priority element because the interval heap is empty");
+				throw new NoSuchElementException("Cannot get the highest priority element because the queue is empty");
 			}
 		}
 		return array.get(3).element;
@@ -114,7 +114,7 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	@Override public E removeMin()
 	{
 		if (size() < 1)
-			throw new NoSuchElementException("Cannot remove the lowest priority element because the interval heap is empty");
+			throw new NoSuchElementException("Cannot remove the lowest priority element because the queue is empty");
 		
 		final PrioritisedElement<E> removedElement = array.get(2);
 		final PrioritisedElement<E> lastElement = array.remove(array.size() - 1);
@@ -128,7 +128,7 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	@Override public E removeMax()
 	{
 		if (size() < 1)
-			throw new NoSuchElementException("Cannot remove the highest priority element because the interval heap is empty");
+			throw new NoSuchElementException("Cannot remove the highest priority element because the queue is empty");
 		
 		int elementToRemove = 3;
 		if (array.size() < 4) {
