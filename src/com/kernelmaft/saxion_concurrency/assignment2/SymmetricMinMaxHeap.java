@@ -157,6 +157,7 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 				// Element is bigger than right sibling, violation of P1
 				
 				swap(index, rightSibling);
+				bubbleDown(index);
 				bubbleDown(rightSibling);
 			}
 			else if (leftChild < array.size()) {
@@ -195,6 +196,7 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 				// Left sibling is bigger than element, violation of P1
 				
 				swap(index, leftSibling);
+				bubbleDown(index);
 				bubbleDown(leftSibling);
 			}
 			else if (leftNephew < array.size()) {
