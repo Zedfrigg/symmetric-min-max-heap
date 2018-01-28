@@ -59,8 +59,6 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	
 	private void bubbleUp(int index, boolean bottomLevel)
 	{
-		// TODO: preserve insertion order for elems with same prio, maybe w/ a comb of bottomLevel checks and > vs >=
-		
 		final int leftSibling = index - 1;
 		if (bottomLevel && !isLeftChild(index) && biggerThanRightSibling(leftSibling)) {
 			swap(index, leftSibling);
