@@ -51,11 +51,4 @@ public interface DoubleEndedPrioQueue<E>
 	 * @throws java.util.NoSuchElementException If the queue is empty.
 	 */
 	public E removeMax();
-	
-	/**
-	 * Update the priority of a given element in the priority queue.
-	 * @param element     The element to change the priority of.
-	 * @param newPriority The new priority the element should have.
-	 */
-	public void updatePriority(E element, int newPriority);
 }

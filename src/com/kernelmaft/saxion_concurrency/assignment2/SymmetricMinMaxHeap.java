@@ -230,45 +230,6 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 		}
 	}
 	
-	@Override public void updatePriority(E element, int newPriority)
-	{
-		throw new RuntimeException("Not implemented");
-		
-//		System.out.println("Updating prio");
-//		if (element == null) {
-//			if (size() > 1) {
-//				int randomIndex = ThreadLocalRandom.current().nextInt(2, array.size());
-//				System.out.println("Picked random one: " + randomIndex);
-//				element = array.get(randomIndex).element;
-//			}
-//			else {
-//				System.out.println("Doing nothing");
-//				return;
-//			}
-//		}
-//
-//		int index = -1;
-//		PrioritisedElement<E> elementHolder = null;
-//		for (int i = 2; i < array.size(); i++) {
-//			final PrioritisedElement<E> currentElement = array.get(i);
-//			if (currentElement.element == element) {
-//				System.out.println("i: " + i);
-//				index = i;
-//				elementHolder = currentElement;
-//				break;
-//			}
-//			else
-//				System.out.println("Is this even reached?");
-//		}
-//		if (index == -1)
-//			throw new NoSuchElementException("Element not present in the queue");
-//		System.out.println("Changed " + index + " from " + elementHolder.priority + " to " + newPriority);
-//		int oldPriority = elementHolder.priority;
-//		elementHolder.priority = newPriority;
-//
-//		bubbleUp(index, false);
-	}
-	
 	private static boolean isLeftChild(int index)
 	{
 		assert index > 0;
