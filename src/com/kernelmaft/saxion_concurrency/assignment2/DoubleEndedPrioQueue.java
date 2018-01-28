@@ -1,7 +1,5 @@
 package com.kernelmaft.saxion_concurrency.assignment2;
 
-// TODO: describe edge cases in JavaDoc
-
 /**
  * A priority queue where elements with both the highest and lowest priority are available.
  */

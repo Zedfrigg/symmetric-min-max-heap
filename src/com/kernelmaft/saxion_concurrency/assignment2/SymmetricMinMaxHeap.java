@@ -233,7 +233,40 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	@Override public void updatePriority(E element, int newPriority)
 	{
 		throw new RuntimeException("Not implemented");
-		// Use bubbleDown w/ L>R checks everywhere
+		
+//		System.out.println("Updating prio");
+//		if (element == null) {
+//			if (size() > 1) {
+//				int randomIndex = ThreadLocalRandom.current().nextInt(2, array.size());
+//				System.out.println("Picked random one: " + randomIndex);
+//				element = array.get(randomIndex).element;
+//			}
+//			else {
+//				System.out.println("Doing nothing");
+//				return;
+//			}
+//		}
+//
+//		int index = -1;
+//		PrioritisedElement<E> elementHolder = null;
+//		for (int i = 2; i < array.size(); i++) {
+//			final PrioritisedElement<E> currentElement = array.get(i);
+//			if (currentElement.element == element) {
+//				System.out.println("i: " + i);
+//				index = i;
+//				elementHolder = currentElement;
+//				break;
+//			}
+//			else
+//				System.out.println("Is this even reached?");
+//		}
+//		if (index == -1)
+//			throw new NoSuchElementException("Element not present in the queue");
+//		System.out.println("Changed " + index + " from " + elementHolder.priority + " to " + newPriority);
+//		int oldPriority = elementHolder.priority;
+//		elementHolder.priority = newPriority;
+//
+//		bubbleUp(index, false);
 	}
 	
 	private static boolean isLeftChild(int index)
@@ -243,10 +276,43 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	}
 	
 	/**
-	 * Gives the DOT-language tree representation of the internal heap. Can be used for visualisation and debugging.
-	 * @return A string containing the representation.
+	 * Internal integrity check, only for debugging and assertions.
+	 * @return Whether the heap is currently a valid SMMH.
 	 */
-	public String toDotTree(boolean includeElements)
+	private boolean isValidSMMH()
+	{
+		for (int i = 2; i < array.size(); i++) {
+			// P1
+			if (i % 2 == 0 && i + 1 < array.size()) {
+				if (array.get(i).priority > array.get(i + 1).priority) {
+					System.out.println("P1 violated at index " + i);
+					return false;
+				}
+			}
+			if (i / 4 > 0) {
+				// P2
+				if (array.get(i / 4 * 2).priority > array.get(i).priority) {
+					System.out.println("P2 violated at index " + i);
+					return false;
+				}
+				// P3
+				if (array.get(i / 4 * 2 + 1).priority < array.get(i).priority) {
+					System.out.println("P3 violated at index " + i);
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * Gives the DOT-language tree representation of the internal heap. Can be used for visualisation and debugging.
+	 * @param includeIndices  Whether the index of each element in the heap array should be included in the node.
+	 * @param includeElements Whether the string representation of the content of each element should be included in
+	 *                        the node.
+	 * @return                A string containing the representation.
+	 */
+	public String toDotTree(boolean includeIndices, boolean includeElements)
 	{
 		final StringBuilder dotOutput = new StringBuilder();
 		dotOutput.append("digraph { ");
@@ -254,7 +320,11 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 		dotOutput.append("1 [label=\"1, root\"]; ");
 		for (int i = 2; i < array.size(); i++) {
 			final int elemPrio = array.get(i).priority;
-			dotOutput.append(i).append(" [label=\"").append(i).append(", ").append(elemPrio);
+			dotOutput.append(i).append(" [label=\"");
+			if (includeIndices)
+				// Include the indices of the nodes in the heap array
+				dotOutput.append(i).append(", ");
+			dotOutput.append(elemPrio);
 			if (includeElements)
 				// Include the toString representation of the elements in the nodes
 				dotOutput.append(", ").append(array.get(i).element);
