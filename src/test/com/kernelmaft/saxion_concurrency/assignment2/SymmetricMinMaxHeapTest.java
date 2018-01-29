@@ -44,10 +44,6 @@ class SymmetricMinMaxHeapTest
 							lastOperation = "Removed max elem";
 						}
 						break;
-					case 4:
-						smmh.updatePriority(null, randomInt(200));
-						lastOperation = "Updated prio";
-						break;
 				}
 			}
 			catch (AssertionError ae) {
