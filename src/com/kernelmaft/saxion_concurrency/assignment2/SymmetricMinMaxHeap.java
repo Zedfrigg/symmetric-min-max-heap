@@ -50,37 +50,42 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	
 	@Override public void put(E newElement, int priority)
 	{
+		assert isValidSMMH();
+		
 		array.add(new PrioritisedElement<>(newElement, priority));
 		// If this is the first element the heap is already valid
-		if (size() > 1)
-			bubbleUp(array.size() - 1, true);
-		// TODO: move bottom-level checks from bubbleUp into this method
+		if (size() > 1) {
+			final int index = array.size() - 1;
+			final int leftSibling = index - 1;
+			if (!isLeftChild(index) && biggerThanRightSibling(leftSibling)) {
+				swap(index, leftSibling);
+				bubbleUp(leftSibling);
+			}
+			else {
+				bubbleUp(index);
+			}
+		}
+		
+		assert isValidSMMH();
 	}
 	
-	private void bubbleUp(int index, boolean bottomLevel)
+	private void bubbleUp(int index)
 	{
-		final int leftSibling = index - 1;
-		if (bottomLevel && !isLeftChild(index) && biggerThanRightSibling(leftSibling)) {
-			swap(index, leftSibling);
-			bubbleUp(leftSibling, false);
-		}
-		else {
-			final int leftChildGrandparent = (index / 4) * 2;
-			final int rightChildGrandparent = leftChildGrandparent + 1;
-			// If the element has no grandparent it doesn't need to be checked, we're at the top of the tree
-			if (leftChildGrandparent != 0) {
-				if (array.get(index).priority < array.get(leftChildGrandparent).priority) {
-					// P2 is violated
-					
-					swap(index, leftChildGrandparent);
-					bubbleUp(leftChildGrandparent, false);
-				}
-				else if (array.get(index).priority > array.get(rightChildGrandparent).priority) {
-					// P3 is violated
-					
-					swap(index, rightChildGrandparent);
-					bubbleUp(rightChildGrandparent, false);
-				}
+		final int leftChildGrandparent = (index / 4) * 2;
+		final int rightChildGrandparent = leftChildGrandparent + 1;
+		// If the element has no grandparent it doesn't need to be checked, we're at the top of the tree
+		if (leftChildGrandparent != 0) {
+			if (array.get(index).priority < array.get(leftChildGrandparent).priority) {
+				// P2 is violated
+				
+				swap(index, leftChildGrandparent);
+				bubbleUp(leftChildGrandparent);
+			}
+			else if (array.get(index).priority > array.get(rightChildGrandparent).priority) {
+				// P3 is violated
+				
+				swap(index, rightChildGrandparent);
+				bubbleUp(rightChildGrandparent);
 			}
 		}
 	}
@@ -111,6 +116,8 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	
 	@Override public E removeMin()
 	{
+		assert isValidSMMH();
+		
 		if (size() < 1)
 			throw new NoSuchElementException("Cannot remove the lowest priority element because the queue is empty");
 		
@@ -120,11 +127,15 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 			array.set(2, lastElement);
 			bubbleDown(2);
 		}
+		
+		assert isValidSMMH();
 		return removedElement.element;
 	}
 	
 	@Override public E removeMax()
 	{
+		assert isValidSMMH();
+		
 		if (size() < 1)
 			throw new NoSuchElementException("Cannot remove the highest priority element because the queue is empty");
 		
@@ -138,6 +149,8 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 			array.set(elementToRemove, lastElement);
 			bubbleDown(elementToRemove);
 		}
+		
+		assert isValidSMMH();
 		return removedElement.element;
 	}
 	
