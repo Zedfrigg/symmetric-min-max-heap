@@ -16,38 +16,64 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 		array.add(null);
 	}
 	
+	/**
+	 * Whether the SMMH currently has no elements in it.
+	 * @return A boolean indication the aforementioned.
+	 */
 	@Override public boolean isEmpty()
 	{
 		return size() == 0;
 	}
 	
+	/**
+	 * Gives the number of elements in the SMMH.
+	 * @return The number of elements.
+	 */
 	@Override public int size()
 	{
 		assert array.size() >= 2;
 		return array.size() - 2;
 	}
 	
+	/**
+	 * Get a reference to the element with the smallest priority. Does not remove the element from the SMMH.
+	 * @return The element reference.
+	 * @throws java.util.NoSuchElementException When there is no smallest element because the SMMH is empty.
+	 */
 	@Override public E getMin()
 	{
 		try {
 			return array.get(2).element;
-		} catch (IndexOutOfBoundsException exception) {
+		}
+		catch (IndexOutOfBoundsException exception) {
 			throw new NoSuchElementException("Cannot get the lowest priority element because the queue is empty");
 		}
 	}
 	
+	/**
+	 * Get a reference to the element with the highest priority. In the case there is only one element in the SMMH it
+	 * will return the same element as {@link #getMin}. Does not remove the element from the SMMH.
+	 * @return The element reference.
+	 * @throws java.util.NoSuchElementException When there is no biggest element because the SMMH is empty.
+	 */
 	@Override public E getMax()
 	{
 		if (size() < 2) {
 			try {
 				return array.get(2).element;
-			} catch (IndexOutOfBoundsException exception) {
+			}
+			catch (IndexOutOfBoundsException exception) {
 				throw new NoSuchElementException("Cannot get the highest priority element because the queue is empty");
 			}
 		}
 		return array.get(3).element;
 	}
 	
+	/**
+	 * Add a new element with a certain priority to the SMMH.
+	 * @param newElement The new element to add.
+	 * @param priority   The priority of the element.
+	 */
 	@Override public void put(E newElement, int priority)
 	{
 		assert isValidSMMH();
@@ -57,6 +83,7 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 		if (size() > 1) {
 			final int index = array.size() - 1;
 			final int leftSibling = index - 1;
+			// Check if we need to swap this element with its left sibling
 			if (!isLeftChild(index) && biggerThanRightSibling(leftSibling)) {
 				swap(index, leftSibling);
 				bubbleUp(leftSibling);
@@ -69,6 +96,11 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 		assert isValidSMMH();
 	}
 	
+	/**
+	 * Restore correct SMMH order by working our way up the tree after an insertion. Checks for P2 and P3 violations
+	 * and performs the appropriate swaps where necessary.
+	 * @param index The index of the element to start at.
+	 */
 	private void bubbleUp(int index)
 	{
 		final int leftChildGrandparent = (index / 4) * 2;
@@ -114,6 +146,11 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 		return array.get(index).priority > array.get(index + 1).priority;
 	}
 	
+	/**
+	 * Remove and return the element with the lowest priority from the SMMH.
+	 * @return A reference to the removed element.
+	 * @throws java.util.NoSuchElementException When there is no element to remove because the SMMH is empty.
+	 */
 	@Override public E removeMin()
 	{
 		assert isValidSMMH();
@@ -132,6 +169,12 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 		return removedElement.element;
 	}
 	
+	/**
+	 * Remove and return the element with the highest priority from the SMMH. The element could also be the element
+	 * with the smallest priority it it's the only one.
+	 * @return A reference to the removed element.
+	 * @throws java.util.NoSuchElementException When there is no element to remove because the SMMH is empty.
+	 */
 	@Override public E removeMax()
 	{
 		assert isValidSMMH();
@@ -140,9 +183,8 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 			throw new NoSuchElementException("Cannot remove the highest priority element because the queue is empty");
 		
 		int elementToRemove = 3;
-		if (array.size() < 4) {
+		if (array.size() < 4)
 			elementToRemove = 2;
-		}
 		final PrioritisedElement<E> removedElement = array.get(elementToRemove);
 		final PrioritisedElement<E> lastElement = array.remove(array.size() - 1);
 		if (array.size() > 3) {
@@ -154,6 +196,10 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 		return removedElement.element;
 	}
 	
+	/**
+	 * Restore SMMH order by working our way down the tree after removal of an element.
+	 * @param index The index of the element to start at.
+	 */
 	private void bubbleDown(int index)
 	{
 		assert index > 0;
@@ -241,6 +287,11 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 		}
 	}
 	
+	/**
+	 * Simple check to see if an element is a left child.
+	 * @param index The index of the element to check.
+	 * @return A boolean indicating whether the element is a left child.
+	 */
 	private static boolean isLeftChild(int index)
 	{
 		assert index > 0;
@@ -254,7 +305,7 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	private boolean isValidSMMH()
 	{
 		for (int i = 2; i < array.size(); i++) {
-			// P1
+			// P1 check
 			if (i % 2 == 0 && i + 1 < array.size()) {
 				if (array.get(i).priority > array.get(i + 1).priority) {
 					System.out.println("P1 violated at index " + i);
@@ -262,12 +313,12 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 				}
 			}
 			if (i / 4 > 0) {
-				// P2
+				// P2 check
 				if (array.get(i / 4 * 2).priority > array.get(i).priority) {
 					System.out.println("P2 violated at index " + i);
 					return false;
 				}
-				// P3
+				// P3 check
 				if (array.get(i / 4 * 2 + 1).priority < array.get(i).priority) {
 					System.out.println("P3 violated at index " + i);
 					return false;
