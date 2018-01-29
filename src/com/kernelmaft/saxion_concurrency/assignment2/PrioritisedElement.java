@@ -9,5 +9,5 @@ public class PrioritisedElement<E>
 	}
 	
 	public final E element;
-	public int priority;
+	public final int priority;
 }
