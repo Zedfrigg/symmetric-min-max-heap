@@ -85,10 +85,4 @@ class SymmetricMinMaxHeapTest
 	{
 		return ThreadLocalRandom.current().nextInt(maxExclusive);
 	}
-	
-	@BeforeEach void setUp()
-	{}
-	
-	@AfterEach void tearDown()
-	{}
 }
