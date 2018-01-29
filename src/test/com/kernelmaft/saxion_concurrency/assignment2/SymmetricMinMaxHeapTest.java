@@ -19,6 +19,24 @@ class SymmetricMinMaxHeapTest
 		smmh = new SymmetricMinMaxHeap<>();
 	}
 	
+	/**
+	 * Testing whether the DOT language generator creates a correct representation of the heap.
+	 */
+	@Test void dotRepresentation()
+	{
+		smmh.put("ten", 10);
+		smmh.put("eleven", 11);
+		smmh.put("twelve", 12);
+		smmh.put("thirteen", 13);
+		smmh.put("fourteen", 14);
+		final String expectedDot = "digraph { 1 [label=\"1, root\"]; 2 [label=\"2, 10, ten\"]; 1->2; 3 [label=\"3, 14, fourteen\"]; 1->3; 4 [label=\"4, 11, eleven\"]; 2->4; 5 [label=\"5, 12, twelve\"]; 2->5; 6 [label=\"6, 13, thirteen\"]; 3->6; }";
+		assertEquals(expectedDot, smmh.toDotTree(true, true));
+	}
+	
+	/**
+	 * Highly unscientific and undeterministic stress test that combines many randomly chosen operations on an SMMH.
+	 * Useful for debugging.
+	 */
 	@Test @Disabled void stressTest()
 	{
 		for (int i = 0; i < 1000; i++) {
@@ -58,6 +76,11 @@ class SymmetricMinMaxHeapTest
 		System.out.println(smmh.toDotTree(false, false));
 	}
 	
+	/**
+	 * Generates a random integer between 0 and a certain maximum. Helper function for {@link #stressTest}.
+	 * @param maxExclusive The exclusive upper limit of the number to be generated.
+	 * @return The random number.
+	 */
 	private static int randomInt(int maxExclusive)
 	{
 		return ThreadLocalRandom.current().nextInt(maxExclusive);
