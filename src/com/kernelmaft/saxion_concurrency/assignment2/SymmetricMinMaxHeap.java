@@ -18,7 +18,7 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	
 	/**
 	 * Whether the SMMH currently has no elements in it.
-	 * @return A boolean indication the aforementioned.
+	 * @return A boolean indicating the aforementioned.
 	 */
 	@Override public boolean isEmpty()
 	{
