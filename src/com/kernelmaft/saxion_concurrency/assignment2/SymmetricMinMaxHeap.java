@@ -146,15 +146,17 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	{
 		assert isValidSMMH();
 		
-		if (size() < 1)
+		if (isEmpty())
 			throw new NoSuchElementException("Cannot remove the lowest priority element because the queue is empty");
 		
 		final PrioritisedElement<E> removedElement = array.get(2);
 		final PrioritisedElement<E> lastElement = array.remove(array.size() - 1);
-		if (array.size() > 3) {
+		// If it exists, overwrite the smallest element with the one removed from the end
+		if (size() >= 1)
 			array.set(2, lastElement);
+		// If there's only one element left skip the bubble down
+		if (size() >= 2)
 			bubbleDown(2);
-		}
 		
 		assert isValidSMMH();
 		return removedElement.element;
@@ -170,15 +172,17 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	{
 		assert isValidSMMH();
 		
-		if (size() < 1)
+		if (isEmpty())
 			throw new NoSuchElementException("Cannot remove the highest priority element because the queue is empty");
 		
 		int elementToRemove = 3;
-		if (array.size() < 4)
+		if (size() == 1)
+			// If there is only one element the smallest element is also the biggest one
 			elementToRemove = 2;
 		final PrioritisedElement<E> removedElement = array.get(elementToRemove);
 		final PrioritisedElement<E> lastElement = array.remove(array.size() - 1);
-		if (array.size() > 3) {
+		// If there is only one element left we don't need to do anything more
+		if (size() >= 2) {
 			array.set(elementToRemove, lastElement);
 			bubbleDown(elementToRemove);
 		}

@@ -104,4 +104,35 @@ class DoubleEndedPrioQueueTest
 		assertSame(biggestElement, depq.removeMax());
 		assertSame(secondBiggestElement, depq.removeMax());
 	}
+	
+	/**
+	 * Testing whether removing the last two smallest elements is handled correctly.
+	 */
+	@Test void removeMinAll()
+	{
+		final Object element1 = new Object();
+		final Object element2 = new Object();
+		depq.put(element1, 1);
+		depq.put(element2, 2);
+		assertSame(element1, depq.removeMin());
+		assertSame(element2, depq.removeMin());
+	}
+	
+	/**
+	 * Testing whether removing the last two biggest elements is handled correctly.
+	 */
+	@Test void removeMaxAll()
+	{
+		final Object element1 = "one";
+		final Object element2 = "two";
+		depq.put(element1, 1);
+		depq.put(element2, 2);
+		depq.put("three", 3);
+		System.out.println(((SymmetricMinMaxHeap<Object>) depq).toDotTree(false, true));
+		depq.removeMax();
+		System.out.println(((SymmetricMinMaxHeap<Object>) depq).toDotTree(false, true));
+		assertSame(element2, depq.removeMax());
+		System.out.println(((SymmetricMinMaxHeap<Object>) depq).toDotTree(false, true));
+		assertSame(element1, depq.removeMax());
+	}
 }
