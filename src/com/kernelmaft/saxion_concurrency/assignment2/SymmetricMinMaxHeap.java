@@ -42,12 +42,9 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	 */
 	@Override public E getMin()
 	{
-		try {
-			return array.get(2).element;
-		}
-		catch (IndexOutOfBoundsException exception) {
+		if (isEmpty())
 			throw new NoSuchElementException("Cannot get the lowest priority element because the queue is empty");
-		}
+		return array.get(2).element;
 	}
 	
 	/**
@@ -58,15 +55,9 @@ public class SymmetricMinMaxHeap<E> implements DoubleEndedPrioQueue<E>
 	 */
 	@Override public E getMax()
 	{
-		if (size() < 2) {
-			try {
-				return array.get(2).element;
-			}
-			catch (IndexOutOfBoundsException exception) {
-				throw new NoSuchElementException("Cannot get the highest priority element because the queue is empty");
-			}
-		}
-		return array.get(3).element;
+		if (isEmpty())
+			throw new NoSuchElementException("Cannot get the highest priority element because the queue is empty");
+		return size() == 1 ? array.get(2).element : array.get(3).element;
 	}
 	
 	/**
