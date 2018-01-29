@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class DoubleEndedPrioQueueTest
 {
-	private final DoubleEndedPrioQueue<Integer> depq;
+	private final DoubleEndedPrioQueue<Object> depq;
 	
 	DoubleEndedPrioQueueTest()
 	{
@@ -21,15 +21,19 @@ class DoubleEndedPrioQueueTest
 	@Test void noElements()
 	{
 		assertEquals(0, depq.size());
+		assertTrue(depq.isEmpty());
 		assertThrows(NoSuchElementException.class, depq::getMin);
 		assertThrows(NoSuchElementException.class, depq::getMax);
 	}
 	
 	@Test void oneElement()
 	{
-		final Integer onlyElement = 0;
+		final Object onlyElement = new Object();
 		depq.put(onlyElement, 1);
+		assertEquals(1, depq.size());
 		assertSame(onlyElement, depq.getMin());
 		assertSame(onlyElement, depq.getMax());
 	}
+	
+	
 }
